@@ -17,12 +17,6 @@ class OpenAIClient:
     """OpenAI API client for emotion analysis and text processing"""
     
     def __init__(self, api_key: Optional[str] = None):
-        """
-        Initialize OpenAI client
-        
-        Args:
-            api_key (Optional[str]): OpenAI API key. If None, uses OPENAI_API_KEY env var
-        """
         self.api_key = api_key or os.getenv('OPENAI_API_KEY')
         if not self.api_key:
             raise ValueError("OpenAI API key not provided. Set OPENAI_API_KEY environment variable or pass api_key parameter")
@@ -31,15 +25,6 @@ class OpenAIClient:
         self.client = OpenAI(api_key=self.api_key)
     
     def analyze_emotion(self, text: str) -> Dict[str, any]:
-        """
-        Analyze emotions in the given text
-        
-        Args:
-            text (str): Text to analyze for emotions
-            
-        Returns:
-            Dict[str, any]: Emotion analysis results
-        """
         prompt = f"""
         Analyze the emotional content of the following text and provide:
         1. Primary emotion (joy, sadness, anger, fear, surprise, disgust, neutral)
@@ -91,17 +76,6 @@ class OpenAIClient:
             }
     
     def generate_emotion_cipher(self, original_text: str, target_emotion: str) -> str:
-        """
-        Generate an emotion cipher that encodes feelings into text
-        This creates a cipher where emotions are embedded into the message structure
-        
-        Args:
-            original_text (str): Original text to cipher
-            target_emotion (str): Target emotion to encode into the cipher
-            
-        Returns:
-            str: Emotion-ciphered text that encodes the target emotion
-        """
         prompt = f"""
         Create an EMOTION CIPHER by transforming the following text to encode the emotion "{target_emotion}":
         
@@ -135,16 +109,6 @@ class OpenAIClient:
             return f"Error generating emotion cipher: {str(e)}"
     
     def decode_emotion_cipher(self, ciphered_text: str) -> dict:
-        """
-        Decode an emotion cipher back to original emotion and meaning
-        This reverses the emotion cipher process to extract encoded feelings
-        
-        Args:
-            ciphered_text (str): The emotion-ciphered text to decode
-            
-        Returns:
-            dict: Contains decoded emotion and core message
-        """
         prompt = f"""
         DECODE this EMOTION CIPHER by analyzing the emotional encoding:
         
@@ -202,15 +166,6 @@ class OpenAIClient:
             }
     
     def generate_emotional_summary(self, texts: List[str]) -> Dict[str, any]:
-        """
-        Generate an emotional summary of multiple texts
-        
-        Args:
-            texts (List[str]): List of texts to analyze
-            
-        Returns:
-            Dict[str, any]: Emotional summary and patterns
-        """
         combined_text = "\n".join([f"{i+1}. {text}" for i, text in enumerate(texts)])
         
         prompt = f"""
@@ -260,28 +215,11 @@ class EmotionProcessor:
     """High-level emotion processing combining OpenAI capabilities"""
     
     def __init__(self, openai_client: OpenAIClient):
-        """
-        Initialize emotion processor
-        
-        Args:
-            openai_client (OpenAIClient): Configured OpenAI client
-        """
         self.openai_client = openai_client
         self.emotion_cache = {}
     
     def process_emotion_cipher(self, text: str, operation: str = "analyze", 
                               target_emotion: Optional[str] = None) -> Dict[str, any]:
-        """
-        Process emotion cipher operations
-        
-        Args:
-            text (str): Input text
-            operation (str): Operation type - "analyze", "encode", "decode"
-            target_emotion (Optional[str]): Target emotion for encoding
-            
-        Returns:
-            Dict[str, any]: Processing results
-        """
         results = {
             "original_text": text,
             "operation": operation,
@@ -310,7 +248,6 @@ class EmotionProcessor:
 
 
 def demo_openai_integration():
-    """Demonstrate OpenAI integration functionality"""
     print("=== OpenAI Integration Demo ===")
     
     # Note: This demo requires a valid OpenAI API key

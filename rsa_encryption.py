@@ -15,23 +15,11 @@ class RSAEncryption:
     """RSA encryption and decryption handler"""
     
     def __init__(self, key_size: int = 2048):
-        """
-        Initialize RSA encryption with specified key size
-        
-        Args:
-            key_size (int): Size of RSA key in bits (default: 2048)
-        """
         self.key_size = key_size
         self.private_key = None
         self.public_key = None
         
     def generate_key_pair(self) -> Tuple[bytes, bytes]:
-        """
-        Generate RSA key pair
-        
-        Returns:
-            Tuple[bytes, bytes]: (private_key_pem, public_key_pem)
-        """
         # Generate private key
         self.private_key = rsa.generate_private_key(
             public_exponent=65537,
@@ -57,13 +45,6 @@ class RSAEncryption:
         return private_pem, public_pem
     
     def load_private_key(self, private_key_pem: bytes, password: Optional[bytes] = None):
-        """
-        Load private key from PEM format
-        
-        Args:
-            private_key_pem (bytes): Private key in PEM format
-            password (Optional[bytes]): Password for encrypted key
-        """
         self.private_key = serialization.load_pem_private_key(
             private_key_pem,
             password=password,
@@ -72,30 +53,12 @@ class RSAEncryption:
         self.public_key = self.private_key.public_key()
     
     def load_public_key(self, public_key_pem: bytes):
-        """
-        Load public key from PEM format
-        
-        Args:
-            public_key_pem (bytes): Public key in PEM format
-        """
         self.public_key = serialization.load_pem_public_key(
             public_key_pem,
             backend=default_backend()
         )
     
     def encrypt(self, message: str) -> str:
-        """
-        Encrypt message using RSA public key
-        
-        Args:
-            message (str): Message to encrypt
-            
-        Returns:
-            str: Base64 encoded encrypted message
-            
-        Raises:
-            ValueError: If public key is not loaded
-        """
         if not self.public_key:
             raise ValueError("Public key not loaded")
         
@@ -116,18 +79,6 @@ class RSAEncryption:
         return base64.b64encode(encrypted).decode('utf-8')
     
     def decrypt(self, encrypted_message: str) -> str:
-        """
-        Decrypt message using RSA private key
-        
-        Args:
-            encrypted_message (str): Base64 encoded encrypted message
-            
-        Returns:
-            str: Decrypted message
-            
-        Raises:
-            ValueError: If private key is not loaded
-        """
         if not self.private_key:
             raise ValueError("Private key not loaded")
         
@@ -149,13 +100,6 @@ class RSAEncryption:
     
     def save_keys_to_files(self, private_key_file: str = "private_key.pem", 
                           public_key_file: str = "public_key.pem"):
-        """
-        Save generated keys to files
-        
-        Args:
-            private_key_file (str): Filename for private key
-            public_key_file (str): Filename for public key
-        """
         if not self.private_key or not self.public_key:
             raise ValueError("Keys not generated yet")
         
@@ -173,13 +117,6 @@ class RSAEncryption:
     
     def load_keys_from_files(self, private_key_file: str = "private_key.pem",
                             public_key_file: Optional[str] = None):
-        """
-        Load keys from files
-        
-        Args:
-            private_key_file (str): Path to private key file
-            public_key_file (Optional[str]): Path to public key file (optional)
-        """
         # Load private key
         if os.path.exists(private_key_file):
             with open(private_key_file, 'rb') as f:
@@ -194,7 +131,6 @@ class RSAEncryption:
 
 
 def demo_rsa_encryption():
-    """Demonstrate RSA encryption functionality"""
     print("=== RSA Encryption Demo ===")
     
     # Create RSA instance

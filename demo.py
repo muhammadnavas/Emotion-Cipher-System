@@ -8,7 +8,6 @@ from emotion_cipher_system import EmotionCipherSystem
 
 
 def hardcoded_demo():
-    """Demonstration with predefined hardcoded examples"""
     print("EMOTION CIPHER - Decoding Feelings through Code")
     print("=" * 60)
     print("Hardcoded Examples Demo")
@@ -85,7 +84,6 @@ def hardcoded_demo():
 
 
 def quick_test():
-    """Quick test with a single example"""
     print("EMOTION CIPHER - Quick Test")
     print("=" * 40)
     
@@ -103,7 +101,6 @@ def quick_test():
 
 
 def batch_test():
-    """Test multiple messages in batch mode"""
     print("EMOTION CIPHER - Batch Processing Test")
     print("=" * 50)
     
