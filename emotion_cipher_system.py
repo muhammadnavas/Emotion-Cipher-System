@@ -8,6 +8,7 @@ import os
 from typing import Dict, List, Optional
 from datetime import datetime
 
+# Core components for encryption and AI integration
 from rsa_encryption import RSAEncryption
 from openai_integration import OpenAIClient
 
@@ -23,17 +24,11 @@ class EmotionCipherSystem:
     """
     
     def __init__(self, openai_api_key: Optional[str] = None):
-        """
-        Initialize the Emotion Cipher System
-        
-        Args:
-            openai_api_key (str, optional): OpenAI API key for emotion processing
-        """
-        # Initialize RSA encryption
+        # Set up encryption capabilities
         self.rsa = RSAEncryption()
         self.keys_generated = False
         
-        # Initialize OpenAI integration if API key provided
+        # Set up AI emotion analysis
         self.openai_client = None
         self.openai_available = False
         
@@ -44,34 +39,26 @@ class EmotionCipherSystem:
             except Exception as e:
                 print(f"Warning: OpenAI integration failed - {e}")
         else:
-            # Try to load from environment (.env file)
+            # Try loading API key from environment variables
             try:
-                self.openai_client = OpenAIClient()  # Will auto-load from .env
+                self.openai_client = OpenAIClient()
                 self.openai_available = True
             except Exception:
                 print("Note: No OpenAI API key provided. Emotion analysis will not be available.")
         
-        # Cipher history for analysis
+        # Keep track of processing history
         self.cipher_history = []
     
     def setup_encryption_keys(self, key_dir: str = "keys") -> bool:
-        """
-        Set up RSA encryption keys (generate new or load existing)
-        
-        Args:
-            key_dir (str): Directory to store/load keys
-            
-        Returns:
-            bool: True if keys are ready
-        """
         os.makedirs(key_dir, exist_ok=True)
         
         private_key_path = os.path.join(key_dir, "private_key.pem")
         public_key_path = os.path.join(key_dir, "public_key.pem")
         
-        # Try to load existing keys
+        # Check if we already have keys saved
         if os.path.exists(private_key_path) and os.path.exists(public_key_path):
             try:
+                # Load the existing key files
                 with open(private_key_path, 'rb') as f:
                     private_pem = f.read()
                 with open(public_key_path, 'rb') as f:
@@ -87,11 +74,11 @@ class EmotionCipherSystem:
             except Exception as e:
                 print(f"Failed to load existing keys: {e}")
         
-        # Generate new keys
+        # No existing keys found, create new ones
         try:
             private_pem, public_pem = self.rsa.generate_key_pair()
             
-            # Save keys to files
+            # Save the new keys for future use
             with open(private_key_path, 'wb') as f:
                 f.write(private_pem)
             with open(public_key_path, 'wb') as f:
@@ -106,17 +93,6 @@ class EmotionCipherSystem:
             return False
     
     def process_message(self, message: str, analyze_emotion: bool = True, pdf_format: bool = False) -> Dict:
-        """
-        Process a message with encryption and optional emotion analysis
-        
-        Args:
-            message (str): Text message to process
-            analyze_emotion (bool): Whether to analyze emotions
-            pdf_format (bool): Whether to display in PDF format
-            
-        Returns:
-            dict: Processing results
-        """
         if not self.keys_generated:
             self.setup_encryption_keys()
         
@@ -127,17 +103,17 @@ class EmotionCipherSystem:
         }
         
         try:
-            # Display input in PDF format
+            # Show the input message in a clean format
             if pdf_format:
                 print(f'\nInput:\n"{message}"\n')
             
-            # Analyze emotion if available and requested
+            # Use AI to understand the emotion in the message
             detected_emotion = "Unknown"
             if analyze_emotion and self.openai_available:
                 emotion_analysis = self.openai_client.analyze_emotion(message)
                 result["emotion_analysis"] = emotion_analysis
                 
-                # Format emotion as "Primary + Secondary" like PDF
+                # Create readable emotion format: "Happy + Excited"
                 primary = emotion_analysis.get('primary_emotion', 'Unknown').title()
                 secondary = emotion_analysis.get('secondary_emotions', [])
                 if secondary:
@@ -145,25 +121,25 @@ class EmotionCipherSystem:
                 else:
                     detected_emotion = primary
             
-            # Generate short cipher display (like PDF examples)
+            # Create a friendly display cipher (real encryption happens below)
             import random
             import string
             cipher_chars = string.ascii_letters + string.digits + '@#$!&*'
             short_cipher = ''.join(random.choices(cipher_chars, k=16))
             
-            # Encrypt the message (actual RSA encryption)
+            # Actually encrypt the message using RSA
             encrypted_message = self.rsa.encrypt(message)
             result["encrypted_message"] = encrypted_message
             result["display_cipher"] = short_cipher
             result["detected_emotion"] = detected_emotion
             
-            # Display encrypted output in PDF format
+            # Show the encrypted result
             if pdf_format:
                 print("Encrypted Output:")
                 print(f'Encrypted Text: "{short_cipher}"')
                 print(f"Detected Emotion: {detected_emotion}\n")
             
-            # Record operation
+            # Keep a record of what we processed
             self.cipher_history.append({
                 "timestamp": result["timestamp"],
                 "message_length": len(message),
@@ -180,18 +156,6 @@ class EmotionCipherSystem:
         return result
     
     def decrypt_message(self, encrypted_message: str, analyze_emotion: bool = True, pdf_format: bool = False, detected_emotion: str = "") -> Dict:
-        """
-        Decrypt a message and optionally analyze its emotions
-        
-        Args:
-            encrypted_message (str): Encrypted message to decrypt
-            analyze_emotion (bool): Whether to analyze emotions in decrypted text
-            pdf_format (bool): Whether to display in PDF format
-            detected_emotion (str): Previously detected emotion for PDF format
-            
-        Returns:
-            dict: Decryption results
-        """
         result = {
             "encrypted_message": encrypted_message,
             "timestamp": datetime.now().isoformat(),
@@ -199,16 +163,16 @@ class EmotionCipherSystem:
         }
         
         try:
-            # Decrypt the message
+            # Unlock the encrypted message back to original text
             decrypted_message = self.rsa.decrypt(encrypted_message)
             result["decrypted_message"] = decrypted_message
             
-            # Analyze emotion if available and requested
+            # Re-analyze emotion if needed
             if analyze_emotion and self.openai_available:
                 emotion_analysis = self.openai_client.analyze_emotion(decrypted_message)
                 result["emotion_analysis"] = emotion_analysis
             
-            # Display decrypted output in PDF format
+            # Show the final decrypted result
             if pdf_format:
                 print("Decrypted Output:")
                 print(f'Original Message: "{decrypted_message}"')
@@ -222,16 +186,6 @@ class EmotionCipherSystem:
         return result
     
     def batch_process_messages(self, messages: List[str], analyze_emotions: bool = True) -> List[Dict]:
-        """
-        Process multiple messages in batch
-        
-        Args:
-            messages (List[str]): List of messages to process
-            analyze_emotions (bool): Whether to analyze emotions
-            
-        Returns:
-            List[dict]: Results for each message
-        """
         results = []
         
         for i, message in enumerate(messages):
@@ -242,12 +196,6 @@ class EmotionCipherSystem:
         return results
     
     def get_system_status(self) -> Dict:
-        """
-        Get current system status and capabilities
-        
-        Returns:
-            dict: System status information
-        """
         return {
             "encryption": {
                 "keys_ready": self.keys_generated,
@@ -265,15 +213,6 @@ class EmotionCipherSystem:
         }
     
     def pdf_format_demo(self, message: str) -> Dict:
-        """
-        Demonstrate emotion cipher in exact PDF format
-        
-        Args:
-            message (str): Input message
-            
-        Returns:
-            dict: Complete results
-        """
         print("=" * 60)
         
         # Process message in PDF format
@@ -293,24 +232,9 @@ class EmotionCipherSystem:
         return result
     
     def process_pdf_format(self, message: str):
-        """
-        Process a single message in PDF format (public API)
-        
-        Args:
-            message (str): Input message
-        """
         return self.pdf_format_demo(message)
     
     def export_data(self, filename: str = "emotion_cipher_data.json") -> bool:
-        """
-        Export system data and history to JSON file
-        
-        Args:
-            filename (str): Output filename
-            
-        Returns:
-            bool: True if export successful
-        """
         try:
             export_data = {
                 "export_info": {
@@ -334,23 +258,23 @@ class EmotionCipherSystem:
 
 # Interactive demonstration function
 def interactive_demo():
-    """Interactive demonstration that takes user input"""
     print("EMOTION CIPHER - Decoding Feelings through Code")
     print("=" * 60)
     print("Interactive Mode - Enter your own messages!")
     print("Type 'quit' or 'exit' to stop.\n")
     
-    # Initialize system
+    # Start up the emotion cipher system
     system = EmotionCipherSystem()
     
-    # Check system status
+    # Let the user know what's working
     status = system.get_system_status()
     print("System Status:")
     print(f"  Encryption: {'✅ Ready' if status['encryption']['keys_ready'] else '⚙️ Setting up...'}")
     print(f"  Emotion Analysis: {'✅ Available' if status['emotion_analysis']['available'] else '❌ Not configured'}")
     
-    message_count = 0
+    message_count = 0  # Keep track of how many messages we've processed
     
+    # Main interaction loop - keep asking for messages until user quits
     while True:
         try:
             print(f"\n{'-' * 40}")
@@ -362,7 +286,7 @@ def interactive_demo():
             message_count += 1
             print(f"\nProcessing Message #{message_count}:")
             
-            # Process in PDF format
+            # Process their message through the emotion cipher
             result = system.pdf_format_demo(user_message)
             
             if not result.get('success'):
@@ -376,6 +300,7 @@ def interactive_demo():
         except Exception as e:
             print(f"❌ Error: {e}")
     
+    # Show final session summary
     print(f"\n{'-' * 40}")
     print(f"Session Summary:")
     print(f"  Messages processed: {message_count}")
