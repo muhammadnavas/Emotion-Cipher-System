@@ -2,10 +2,6 @@
 
 A secure emotion-aware text processing system that combines RSA encryption with AI-powered emotion analysis.
 
-## Repository
-
-🔗 **GitHub Repository**: [https://github.com/muhammadnavas/Emotion-Cipher-System.git](https://github.com/muhammadnavas/Emotion-Cipher-System.git)
-
 ## Overview
 
 The Emotion Cipher System allows you to:
