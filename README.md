@@ -9,7 +9,6 @@ The Emotion Cipher System allows you to:
 - **Analyze emotions** in text using AI (OpenAI GPT-3.5-turbo)
 - **Interactive processing** with real-time user input
 - **Demonstrate capabilities** with predefined examples
-- **PDF-compliant output** matching specification requirements
 
 ## Features
 
