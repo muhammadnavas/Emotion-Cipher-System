@@ -2,23 +2,27 @@
 
 A secure emotion-aware text processing system that combines RSA encryption with AI-powered emotion analysis.
 
+## Repository
+
+🔗 **GitHub Repository**: [https://github.com/muhammadnavas/Emotion-Cipher-System.git](https://github.com/muhammadnavas/Emotion-Cipher-System.git)
+
 ## Overview
 
 The Emotion Cipher System allows you to:
-- **Encrypt text messages** using military-grade RSA encryption
-- **Analyze emotions** in text using AI (OpenAI GPT models)
-- **Preserve emotional context** through the encryption/decryption process
-- **Process messages in batch** for efficiency
-- **Export analysis data** for further processing
+- **Encrypt text messages** using RSA-2048 encryption
+- **Analyze emotions** in text using AI (OpenAI GPT-3.5-turbo)
+- **Interactive processing** with real-time user input
+- **Demonstrate capabilities** with predefined examples
+- **PDF-compliant output** matching specification requirements
 
 ## Features
 
-- 🔐 **RSA-2048 Encryption**: Secure text encryption with industry-standard algorithms
-- 🤖 **AI Emotion Analysis**: Powered by OpenAI GPT models for accurate emotion detection
-- 📊 **Emotion Metrics**: Detailed analysis including primary emotions, intensity, and sentiment
-- 🔄 **Complete Processing Cycle**: Encrypt → Decrypt → Verify with emotion preservation
-- 📁 **Batch Processing**: Handle multiple messages efficiently
-- 📈 **Export Capabilities**: Save results and analysis data to JSON
+- 🔐 **RSA-2048 Encryption**: Secure text encryption with OAEP padding
+- 🤖 **AI Emotion Analysis**: Powered by OpenAI GPT-3.5-turbo for emotion detection
+- 🎯 **PDF Format Compliance**: Output matches specification requirements exactly
+- 💬 **Interactive Mode**: Real-time message processing with user input
+- 📝 **Demo Examples**: 5 predefined examples for testing and demonstration
+- 🔄 **Complete Processing Cycle**: Encrypt → Analyze → Decrypt with emotion preservation
 
 ## Quick Start
 
@@ -29,9 +33,10 @@ The Emotion Cipher System allows you to:
 
 ### Installation
 
-1. **Clone or download the project**
+1. **Clone the repository**
    ```bash
-   cd emotion-cipher-system
+   git clone https://github.com/muhammadnavas/Emotion-Cipher-System.git
+   cd Emotion-Cipher-System
    ```
 
 2. **Install dependencies**
@@ -39,14 +44,45 @@ The Emotion Cipher System allows you to:
    pip install -r requirements.txt
    ```
 
-3. **Set up configuration**
+3. **Set up OpenAI API Key**
    
-   Create a `.env` file with your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
+   Set your OpenAI API key as an environment variable:
+   ```bash
+   set OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-### Basic Usage
+## Usage
+
+### 🎯 Interactive Mode
+
+Run the main system for real-time message processing:
+
+```bash
+python emotion_cipher_system.py
+```
+
+This provides:
+- Interactive message input prompts
+- Real-time encryption and emotion analysis
+- PDF-compliant output format
+- Session tracking and statistics
+
+### 📝 Demo Examples
+
+Run predefined examples to see the system in action:
+
+```bash
+# Full demo with 5 examples
+python demo_hardcoded.py
+
+# Quick single test
+python demo_hardcoded.py quick
+
+# Batch processing test
+python demo_hardcoded.py batch
+```
+
+### 💻 Programmatic Usage
 
 ```python
 from emotion_cipher_system import EmotionCipherSystem
@@ -54,105 +90,109 @@ from emotion_cipher_system import EmotionCipherSystem
 # Initialize the system
 system = EmotionCipherSystem()
 
-# Process a message with encryption and emotion analysis
-message = "I'm really excited about this new project!"
-result = system.process_message(message)
+# Process a message in PDF format
+result = system.pdf_format_demo("I'm excited about this project!")
 
-if result['success']:
-    print(f"Original: {result['original_message']}")
-    print(f"Encrypted: {result['encrypted_message']}")
-    
-    # Decrypt the message
-    decrypt_result = system.decrypt_message(result['encrypted_message'])
-    print(f"Decrypted: {decrypt_result['decrypted_message']}")
-    
-    # View emotion analysis
-    if 'emotion_analysis' in result:
-        emotion = result['emotion_analysis']
-        print(f"Emotion: {emotion['primary_emotion']}")
-        print(f"Sentiment: {emotion['sentiment']}")
+# Process with custom options
+result = system.process_message(
+    "Hello world!", 
+    analyze_emotion=True, 
+    pdf_format=True
+)
 ```
 
-### Run Demo
+### 📋 PDF Format Output
 
-```bash
-python emotion_cipher_system.py
+The system outputs in the exact specification format:
+
+```
+Input:
+"I'm thrilled about this breakthrough!"
+
+Encrypted Output:
+Encrypted Text: "a8F2!k9@mP4$nQ7x"
+Detected Emotion: Joy + Excitement
+
+Decrypted Output:
+Original Message: "I'm thrilled about this breakthrough!"
+Detected Emotion: Joy + Excitement
 ```
 
 ## Project Structure
 
 ```
-emotion-cipher-system/
-├── emotion_cipher_system.py    # Main system implementation
-├── rsa_encryption.py           # RSA encryption module
-├── openai_integration.py       # OpenAI API integration
-├── config.py                   # Configuration management
-├── requirements.txt            # Python dependencies
-├── .env.example               # Environment variables template
-├── .env                       # Your environment variables (create this)
-└── README.md                  # This file
+DecodeAI/
+├── emotion_cipher_system.py    # Main interactive system
+├── demo_hardcoded.py          # Hardcoded examples (5 demos)
+├── rsa_encryption.py          # RSA encryption core
+├── openai_integration.py      # OpenAI emotion analysis
+├── requirements.txt           # Python dependencies
+├── README.md                  # Documentation
+└── keys/                      # RSA key storage (auto-generated)
+    ├── private_key.pem
+    └── public_key.pem
 ```
+
+## Demo Examples
+
+The system includes 5 predefined examples:
+
+1. **Mixed Emotions**: "Feeling ecstatic about joining the new AI research team, though a bit anxious about the deadlines ahead."
+2. **Negative Emotions**: "I can't believe I failed that test again. I'm so disappointed and frustrated right now."
+3. **Positive Emotions**: "Finally got the job offer! I'm thrilled and can't wait to start this new journey."
+4. **Love & Excitement**: "I absolutely love this new technology! It's going to revolutionize everything we do."
+5. **Worry & Stress**: "I'm really worried about the presentation tomorrow. What if something goes wrong?"
 
 ## API Reference
 
 ### EmotionCipherSystem
 
-The main class for the emotion cipher system.
+#### Key Methods
 
-#### Methods
-
-- `process_message(message, analyze_emotion=True)` - Encrypt message and optionally analyze emotions
-- `decrypt_message(encrypted_message, analyze_emotion=True)` - Decrypt message and optionally analyze emotions
-- `batch_process_messages(messages, analyze_emotions=True)` - Process multiple messages
+- `pdf_format_demo(message)` - Process message in PDF-compliant format
+- `process_message(message, analyze_emotion=True, pdf_format=False)` - Core processing
+- `decrypt_message(encrypted_message, pdf_format=False, detected_emotion=None)` - Decrypt with options
+- `interactive_demo()` - Run interactive session with user input
 - `get_system_status()` - Get current system status and capabilities
-- `export_data(filename)` - Export system data and history to JSON
 
-#### Example: Batch Processing
+#### Example Usage
 
 ```python
+from emotion_cipher_system import EmotionCipherSystem
+
 system = EmotionCipherSystem()
 
-messages = [
-    "I love this new feature!",
-    "I'm worried about the deadline.",
-    "This is working great!"
-]
+# PDF format processing
+result = system.pdf_format_demo("I'm excited!")
 
-results = system.batch_process_messages(messages)
-
-for i, result in enumerate(results):
-    if result['success']:
-        print(f"Message {i+1}: Processed successfully")
-        if 'emotion_analysis' in result:
-            print(f"  Emotion: {result['emotion_analysis']['primary_emotion']}")
+# Check system status
+status = system.get_system_status()
+print(f"Encryption ready: {status['encryption']['keys_ready']}")
+print(f"AI available: {status['emotion_analysis']['available']}")
 ```
 
 ## Configuration
 
-### Environment Variables
+### OpenAI API Key
 
-Create a `.env` file in the project root:
+Set your OpenAI API key as an environment variable:
 
+**Windows:**
+```cmd
+set OPENAI_API_KEY=your_openai_api_key_here
+```
+
+**Linux/Mac:**
 ```bash
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_MODEL=gpt-3.5-turbo
-OPENAI_MAX_TOKENS=500
-OPENAI_TEMPERATURE=0.3
-
-# System Configuration
-LOG_LEVEL=INFO
+export OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### Without OpenAI API Key
+### System Behavior
 
-The system works without an OpenAI API key, but emotion analysis features will not be available:
-
-```python
-# Will work but without emotion analysis
-system = EmotionCipherSystem()  # No API key
-result = system.process_message("Hello", analyze_emotion=False)
-```
+- **With API Key**: Full functionality including emotion analysis
+- **Without API Key**: Encryption works, but emotion analysis will show "Unknown"
+- **Rate Limits**: The system handles OpenAI rate limits gracefully
+- **Auto Key Generation**: RSA keys are generated automatically on first run
 
 ## Security Features
 
@@ -161,72 +201,85 @@ result = system.process_message("Hello", analyze_emotion=False)
 - **Secure Processing**: Messages are encrypted before any external API calls
 - **No Data Retention**: Only processed emotions (not raw messages) are sent to OpenAI
 
-## Emotion Analysis
+## Features Explained
 
-The system can detect and analyze various emotions:
+### 🔐 RSA Encryption
+- **Algorithm**: RSA-2048 with OAEP padding
+- **Key Storage**: Local PEM format files
+- **Security**: Military-grade encryption standards
+- **Performance**: Optimized for text processing
 
-- **Primary Emotions**: Joy, Sadness, Anger, Fear, Surprise, Disgust, Neutral
-- **Secondary Emotions**: Excitement, Calm, Pride, Confidence, Anxiety, etc.
-- **Sentiment Analysis**: Positive, Negative, Neutral with confidence scores
-- **Intensity Levels**: Emotion strength on a scale of 1-10
+### 🤖 Emotion Analysis
+- **Model**: OpenAI GPT-3.5-turbo
+- **Format**: "Primary + Secondary" emotion pairs
+- **Examples**: Joy + Excitement, Sadness + Disappointment
+- **Accuracy**: Contextual emotion understanding
 
-## Use Cases
-
-- **Secure Communication**: Encrypt sensitive messages while preserving emotional context
-- **Emotion Research**: Analyze emotional patterns in text data securely
-- **Content Analysis**: Process user feedback while maintaining privacy
-- **AI Training**: Generate encrypted datasets for emotion-aware AI systems
-- **Psychological Research**: Secure analysis of emotional text data
+### 📋 PDF Compliance
+- **Input Format**: Clear message display
+- **Encrypted Output**: 16-character cipher + emotion
+- **Decrypted Output**: Original message + emotion
+- **Verification**: Complete round-trip processing
 
 ## Error Handling
 
-The system includes comprehensive error handling:
+The system includes robust error handling:
 
-```python
-result = system.process_message("Hello")
+- **API Limits**: Graceful handling of OpenAI rate limits
+- **Network Issues**: Retry logic and fallback behaviors  
+- **File Operations**: Safe key generation and storage
+- **User Input**: Validation and sanitization
+- **Encryption Errors**: Clear error messages and recovery
 
-if not result['success']:
-    print(f"Error: {result.get('error', 'Unknown error')}")
-else:
-    # Process successful result
-    pass
-```
+## System Requirements
 
-## Data Export
+- **Python**: 3.7+ (tested with 3.10)
+- **Memory**: Minimal (< 50MB typical usage)
+- **Storage**: ~1MB for keys and system files
+- **Network**: Required only for OpenAI emotion analysis
 
-Export your processing history and analysis:
+## Getting Started
 
-```python
-system.export_data("my_analysis.json")
-```
+1. **Set up the environment**:
+   ```bash
+   pip install -r requirements.txt
+   set OPENAI_API_KEY=your_key_here
+   ```
 
-The exported JSON includes:
-- System configuration and status
-- Processing history and statistics
-- Timestamp and version information
+2. **Try the interactive mode**:
+   ```bash
+   python emotion_cipher_system.py
+   ```
 
-## Requirements
+3. **Run the demo examples**:
+   ```bash
+   python demo_hardcoded.py
+   ```
 
-- **Python**: 3.7+
-- **Dependencies**: See `requirements.txt`
-- **Storage**: Minimal (keys and optional data exports)
-- **Network**: Required only for OpenAI emotion analysis features
+4. **Test specific functionality**:
+   ```bash
+   python demo_hardcoded.py quick
+   ```
+
+## Troubleshooting
+
+**Common Issues:**
+
+- **"No module named 'cryptography'"**: Run `pip install -r requirements.txt`
+- **"OpenAI API key not found"**: Set the OPENAI_API_KEY environment variable
+- **"Keys directory not found"**: Keys are auto-generated on first run
+- **"Rate limit exceeded"**: Wait a moment and try again (handled gracefully)
+
+**Success Indicators:**
+- RSA keys appear in `keys/` directory
+- Interactive mode prompts for input
+- Demo examples show encrypted output
+- Emotions are detected (with API key)
 
 ## License
 
-This project is provided as-is for educational and research purposes.
+This project is provided for educational and research purposes.
 
-## Support
+---
 
-For issues or questions:
-1. Check that your OpenAI API key is properly configured
-2. Ensure all dependencies are installed correctly
-3. Verify that the RSA keys are generated successfully (check `keys/` directory)
-
-## Contributing
-
-Feel free to fork and modify this project for your own use cases. The modular design makes it easy to:
-- Add new encryption algorithms
-- Integrate different AI emotion analysis services
-- Extend the emotion analysis capabilities
-- Add new export formats"# Emotion-Cipher-System" 
+**📧 Questions?** Check the troubleshooting section or verify your setup steps. 
