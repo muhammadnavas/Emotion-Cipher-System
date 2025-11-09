@@ -138,7 +138,6 @@ The system includes 5 predefined examples:
 
 #### Key Methods
 
-- `pdf_format_demo(message)` - Process message in PDF-compliant format
 - `process_message(message, analyze_emotion=True, pdf_format=False)` - Core processing
 - `decrypt_message(encrypted_message, pdf_format=False, detected_emotion=None)` - Decrypt with options
 - `interactive_demo()` - Run interactive session with user input
