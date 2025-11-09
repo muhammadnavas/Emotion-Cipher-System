@@ -15,7 +15,6 @@ The Emotion Cipher System allows you to:
 
 - 🔐 **RSA-2048 Encryption**: Secure text encryption with OAEP padding
 - 🤖 **AI Emotion Analysis**: Powered by OpenAI GPT-3.5-turbo for emotion detection
-- 🎯 **PDF Format Compliance**: Output matches specification requirements exactly
 - 💬 **Interactive Mode**: Real-time message processing with user input
 - 📝 **Demo Examples**: 5 predefined examples for testing and demonstration
 - 🔄 **Complete Processing Cycle**: Encrypt → Analyze → Decrypt with emotion preservation
@@ -60,7 +59,6 @@ python emotion_cipher_system.py
 This provides:
 - Interactive message input prompts
 - Real-time encryption and emotion analysis
-- PDF-compliant output format
 - Session tracking and statistics
 
 ### 📝 Demo Examples
@@ -96,11 +94,7 @@ result = system.process_message(
     pdf_format=True
 )
 ```
-
-### 📋 PDF Format Output
-
-The system outputs in the exact specification format:
-
+ ## Output Format :
 ```
 Input:
 "I'm thrilled about this breakthrough!"
@@ -211,12 +205,6 @@ export OPENAI_API_KEY=your_openai_api_key_here
 - **Examples**: Joy + Excitement, Sadness + Disappointment
 - **Accuracy**: Contextual emotion understanding
 
-### 📋 PDF Compliance
-- **Input Format**: Clear message display
-- **Encrypted Output**: 16-character cipher + emotion
-- **Decrypted Output**: Original message + emotion
-- **Verification**: Complete round-trip processing
-
 ## Error Handling
 
 The system includes robust error handling:
@@ -271,10 +259,6 @@ The system includes robust error handling:
 - Interactive mode prompts for input
 - Demo examples show encrypted output
 - Emotions are detected (with API key)
-
-## License
-
-This project is provided for educational and research purposes.
 
 ---
 
